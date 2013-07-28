@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BrawlViewR4")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("BrawlView")]
+[assembly: AssemblyDescription("View all MDL0 nodes in a file")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BrawlViewR4")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyProduct("BrawlView")]
+[assembly: AssemblyCopyright("Copyright © 2013 libertyernie")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
