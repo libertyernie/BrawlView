@@ -48,35 +48,51 @@ namespace BrawlView {
 			}
 
 			this.Text = rootNode.Name;
-			List<MDL0Node> models = new List<MDL0Node>();
-			PopulateModelList(rootNode, models);
-			modelPanel1.ClearAll();
-			this.Controls.Add(modelPanel1);
-			Vector3? fmin = null, fmax = null;
-			foreach (MDL0Node model in models) {
-				if (model.Name.Contains("Shd")) continue; // skip
-				model.Populate();
-				model._renderBones = false;
-				model._renderPolygons = true;
-				model._renderWireframe = false;
-				model._renderVertices = false;
-				model._renderBox = false;
-				model._renderNormals = false;
-				model.ApplyCHR(null, 0);
-				model.ApplySRT(null, 0);
-				modelPanel1.AddTarget(model);
-
-				Vector3 min, max;
-				model.GetBox(out min, out max);
-				fmin = Vector3.Min(fmin ?? min, min);
-				fmax = Vector3.Max(fmax ?? max, max);
-			}
-			if (models.Count > 0) {
-				fmin = Vector3.Max(fmin.Value, new Vector3(-100f));
-				fmax = Vector3.Min(fmax.Value, new Vector3(100f));
-				modelPanel1.SetCamWithBox(fmin.Value, fmax.Value);
+			if (rootNode is RSTMNode) {
+				PropertyGrid grid = new PropertyGrid() {
+					Dock = DockStyle.Fill,
+					HelpVisible = false,
+					SelectedObject = rootNode
+				};
+				AudioPlaybackPanel ap = new AudioPlaybackPanel() {
+					TargetSource = (RSTMNode)rootNode,
+					Dock = DockStyle.Bottom
+				};
+				this.Controls.Clear();
+				this.Controls.Add(grid);
+				this.Controls.Add(ap);
+				this.Controls.Add(menuStrip1);
 			} else {
-				MessageBox.Show(this, "There are no MDL0 models in this file.");
+				List<MDL0Node> models = new List<MDL0Node>();
+				PopulateModelList(rootNode, models);
+				modelPanel1.ClearAll();
+				//this.Controls.Add(modelPanel1);
+				Vector3? fmin = null, fmax = null;
+				foreach (MDL0Node model in models) {
+					if (model.Name.Contains("Shd")) continue; // skip
+					model.Populate();
+					model._renderBones = false;
+					model._renderPolygons = true;
+					model._renderWireframe = false;
+					model._renderVertices = false;
+					model._renderBox = false;
+					model._renderNormals = false;
+					model.ApplyCHR(null, 0);
+					model.ApplySRT(null, 0);
+					modelPanel1.AddTarget(model);
+
+					Vector3 min, max;
+					model.GetBox(out min, out max);
+					fmin = Vector3.Min(fmin ?? min, min);
+					fmax = Vector3.Max(fmax ?? max, max);
+				}
+				if (models.Count > 0) {
+					fmin = Vector3.Max(fmin.Value, new Vector3(-100f));
+					fmax = Vector3.Min(fmax.Value, new Vector3(100f));
+					modelPanel1.SetCamWithBox(fmin.Value, fmax.Value);
+				} else {
+					MessageBox.Show(this, "There are no MDL0 models in this file.");
+				}
 			}
 			this.Update();
 		}
